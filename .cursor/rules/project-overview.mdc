@@ -28,5 +28,6 @@ Single-player bullet hell game on real-world Mapbox map. Player moves (WASD), sh
 
 ## Key Conventions
 
+- **Docker-first**: Luôn dùng Docker/container cho Node, npm, dev - không chạy trên host (xem `docker-workflow.mdc`)
 - Vietnamese or English in comments/docs - be consistent per file
 - Keep MCP integration experimental, minimal scope
