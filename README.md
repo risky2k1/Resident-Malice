@@ -19,8 +19,18 @@ docker compose --profile dev up
 docker compose --profile prod up
 ```
 
+## Cấu hình Supabase
+
+1. Copy `.env.example` → `.env`
+2. Lấy credentials từ [Supabase Dashboard](https://supabase.com/dashboard) → Project → Settings → API
+3. Điền vào `.env`:
+   - `VITE_SUPABASE_URL` - Project URL
+   - `VITE_SUPABASE_ANON_KEY` - anon/public key
+
 ## Env
 
-- `VITE_MAPBOX_TOKEN` - Mapbox token
-- `VITE_SUPABASE_URL` - Supabase URL
-- `VITE_SUPABASE_ANON_KEY` - Supabase anon key
+| Biến | Mô tả |
+|------|-------|
+| `VITE_SUPABASE_URL` | Supabase Project URL |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anon key |
+| `VITE_MAPBOX_TOKEN` | Mapbox access token |
