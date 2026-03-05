@@ -1,6 +1,6 @@
 ---
 name: project-architecture
-description: Explains Resident Evil project architecture, folder structure, and deployment. Use when adding new features, configuring Docker, or deploying. Covers NestJS + React + Supabase + Redis + Mapbox.
+description: Explains Resident Evil project architecture, folder structure, and deployment. Use when adding new features, configuring Docker, or deploying. Covers React + Supabase + Mapbox.
 ---
 
 # Project Architecture
@@ -9,8 +9,12 @@ description: Explains Resident Evil project architecture, folder structure, and 
 
 ```
 resident-evil/
-├── backend/          # NestJS API
-├── frontend/         # React + Mapbox + game
+├── src/              # React app source
+├── public/
+├── index.html
+├── package.json
+├── vite.config.ts
+├── Dockerfile
 ├── docker-compose.yml
 └── .cursor/          # Rules, skills
 ```
@@ -19,18 +23,16 @@ resident-evil/
 
 | Service | Port | Purpose |
 |---------|------|---------|
-| backend | 3000 | NestJS API |
-| frontend | 5173→80 | React app (Vite) |
+| app (prod) | 5173→80 | React app (nginx) |
+| app-dev | 5173 | Vite dev server |
 
 ## Deployment
 
-- **Frontend**: Vercel (static/SSR)
-- **Backend**: Railway, Render, or Fly.io (NestJS needs persistent process)
-- **DB**: Supabase (PostgreSQL)
-- **Redis**: Upstash or Redis Cloud (serverless-friendly)
+- **App**: Vercel (static/SPA)
+- **Backend**: Supabase (Auth, PostgreSQL, Realtime, Edge Functions)
 
 ## Adding Features
 
-1. Backend: New module → controller → service → DTO
-2. Frontend: Component + hooks, call API via fetch/axios
-3. Game logic: Prefer client-side for real-time; backend for persistence
+1. Supabase: Add tables, RLS policies, Edge Functions if needed
+2. Frontend: Component + hooks, call Supabase client
+3. Game logic: Prefer client-side for real-time; Supabase for persistence

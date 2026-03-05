@@ -8,20 +8,18 @@
 
 ## Coordinate Systems
 
-- **WGS84** (lat/lng): Backend, persistence
+- **WGS84** (lat/lng): Supabase, persistence
 - **Screen** (px): Mapbox `project()` / `unproject()`
 - **World** (game units): Optional for PixiJS overlay
 
-## API Endpoints (Planned)
+## Supabase
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| GET | /players/:id | Get player + last position |
-| PATCH | /players/:id/position | Save position |
-| GET | /weapons | List weapons |
-| GET | /items | List item types |
+- **Auth**: `supabase.auth` - sign in, session
+- **Tables**: `players` (position, inventory), `weapons`, `items`
+- **RLS**: Enable Row Level Security for user-owned data
 
 ## Environment
 
 - `VITE_MAPBOX_TOKEN` - Mapbox access token
-- `VITE_API_URL` - Backend base URL
+- `VITE_SUPABASE_URL` - Supabase project URL
+- `VITE_SUPABASE_ANON_KEY` - Supabase anon key

@@ -1,50 +1,23 @@
 # Production: docker compose --profile prod up
 # Development: docker compose --profile dev up
 services:
-  backend:
+  app:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: resident-malice-api
-    ports:
-      - "3000:3000"
-    restart: always
-    profiles:
-      - prod
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: resident-malice-web
+    container_name: resident-evil-web
     ports:
       - "5173:80"
-    depends_on:
-      - backend
     restart: always
     profiles:
       - prod
 
-  backend-dev:
+  app-dev:
     image: node:20-alpine
     working_dir: /app
     volumes:
-      - ./backend:/app
-      - backend_node_modules:/app/node_modules
-    ports:
-      - "3000:3000"
-    command: sh -c "npm install && npm run start:dev"
-    environment:
-      - NODE_ENV=development
-    profiles:
-      - dev
-
-  frontend-dev:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-      - frontend_node_modules:/app/node_modules
+      - .:/app
+      - app_node_modules:/app/node_modules
     ports:
       - "5173:5173"
     command: sh -c "npm install && npm run dev:docker"
@@ -54,5 +27,4 @@ services:
       - dev
 
 volumes:
-  backend_node_modules:
-  frontend_node_modules:
+  app_node_modules:

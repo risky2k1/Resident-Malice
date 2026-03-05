@@ -10,7 +10,7 @@ description: Guides development of the Resident Evil bullet hell game. Use when 
 - **Map**: Mapbox GL, zoom 18-20
 - **Movement**: WASD, no walk-through buildings
 - **Shooting**: Mouse direction, object pooling for bullets
-- **Save**: Every 5 min or shortcut → `{ lat, lng }` to backend
+- **Save**: Every 5 min or shortcut → `{ lat, lng }` to Supabase
 
 ## Mapbox + Collision
 

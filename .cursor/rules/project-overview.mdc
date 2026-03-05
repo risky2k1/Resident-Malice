@@ -13,16 +13,15 @@ Single-player bullet hell game on real-world Mapbox map. Player moves (WASD), sh
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | React, Mapbox GL, PixiJS/Phaser (game render) |
-| Backend | NestJS |
-| Database | PostgreSQL (Supabase) |
-| Cache | Redis |
+| App | React, Vite, Mapbox GL, PixiJS/Phaser (game render) |
+| Backend | Supabase (Auth, PostgreSQL, Realtime, Edge Functions) |
 | Map | Mapbox (zoom 18-20 for street level) |
-| Deploy | Vercel (frontend), Railway/Render (backend) |
+| Deploy | Vercel |
 
 ## Architecture
 
-- **Monorepo**: `backend/` (NestJS), `frontend/` (React)
+- **Single app**: React + Vite at project root
+- **Supabase**: Auth, DB, Realtime - no separate backend
 - **Docker**: `docker-compose.yml` for local dev
 - **Single player first** - no real-time sync initially
 

@@ -1,6 +1,6 @@
 ---
 description: Game mechanics - collision, weapons, spawn, items
-globs: frontend/**/*.{ts,tsx}, backend/**/game/**/*.ts
+globs: src/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
@@ -20,10 +20,10 @@ alwaysApply: false
 ## Spawn
 
 - Zombies spawn around player (radius-based)
-- Spawn rate/config from backend or local config
+- Spawn rate/config from Supabase or local config
 
 ## Save Position
 
 - Trigger: every 5 minutes OR keyboard shortcut (e.g. `S` or `F5`)
-- Payload: `{ lat, lng, userId }`
+- Payload: `{ lat, lng, userId }` → Supabase `players` table
 - Load on game start from last saved position

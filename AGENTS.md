@@ -9,9 +9,9 @@ Dự án **Resident Evil** - bullet hell game trên Mapbox.
 
 ## Stack
 
-- Backend: NestJS
-- Frontend: React + Mapbox + PixiJS/Phaser
-- DB: PostgreSQL (Supabase), Redis
+- App: React + Vite + Mapbox + PixiJS/Phaser
+- Backend: Supabase (Auth, PostgreSQL, Realtime)
+- Deploy: Vercel
 
 ## Docker
 
@@ -22,8 +22,7 @@ Dự án **Resident Evil** - bullet hell game trên Mapbox.
 | Context | Xem |
 |---------|-----|
 | Docker, npm, dev commands | `.cursor/rules/docker-workflow.mdc` |
-| Backend API | `.cursor/rules/backend-nestjs.mdc` |
-| Frontend / game | `.cursor/rules/frontend-react.mdc` |
+| React, Mapbox, game | `.cursor/rules/frontend-react.mdc` |
 | Game mechanics | `.cursor/rules/game-mechanics.mdc` |
 | Mapbox, collision, weapons | `.cursor/skills/resident-evil-game/` |
 | Architecture, deploy | `.cursor/skills/project-architecture/` |

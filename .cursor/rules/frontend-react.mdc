@@ -1,6 +1,6 @@
 ---
-description: React frontend and game rendering conventions
-globs: frontend/**/*.{ts,tsx}
+description: React app and game rendering conventions
+globs: src/**/*.{ts,tsx}
 alwaysApply: false
 ---
 
@@ -24,7 +24,8 @@ alwaysApply: false
 - Spatial hash or quadtree for collision detection
 - WASD movement, mouse direction for shooting
 
-## State
+## State & Supabase
 
-- Player position: sync with backend on save (5 min or shortcut)
+- Player position: sync with Supabase on save (5 min or shortcut)
 - Local state for real-time movement, no frequent API calls
+- Use Supabase client for Auth, DB, Realtime

@@ -4,3 +4,6 @@ dist
 .gitignore
 Dockerfile
 npm-debug.log
+.cursor
+README.md
+AGENTS.md
