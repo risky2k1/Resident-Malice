@@ -1,1 +1,21 @@
-# init
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: resident-malice-api
+    ports:
+      - "3000:3000"
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: resident-malice-web
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: always
