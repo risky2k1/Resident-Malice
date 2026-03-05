@@ -4,7 +4,11 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 
-export function Map() {
+type MapProps = {
+  center: { lat: number; lng: number }
+}
+
+export function Map({ center }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<mapboxgl.Map | null>(null)
 
@@ -16,7 +20,7 @@ export function Map() {
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [106.7, 10.78],
+      center: [center.lng, center.lat],
       zoom: 20,
     })
 
@@ -28,6 +32,10 @@ export function Map() {
       mapRef.current = null
     }
   }, [])
+
+  useEffect(() => {
+    mapRef.current?.setCenter([center.lng, center.lat])
+  }, [center.lat, center.lng])
 
   return <div ref={containerRef} className="map-container" />
 }
