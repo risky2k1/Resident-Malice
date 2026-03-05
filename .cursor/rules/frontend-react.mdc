@@ -1,0 +1,30 @@
+---
+description: React frontend and game rendering conventions
+globs: frontend/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Frontend Rules
+
+## Structure
+
+- React functional components + hooks
+- Separate game canvas/layer from UI overlay
+- Mapbox GL for map; PixiJS or Phaser for game entities (bullets, zombies)
+
+## Mapbox
+
+- Zoom level 18-20 for street visibility
+- Use building footprints / boundaries for collision (no walk-through)
+- Preload tiles when possible to reduce loading during movement
+
+## Game Loop
+
+- Object pooling for projectiles (bullet hell = many bullets)
+- Spatial hash or quadtree for collision detection
+- WASD movement, mouse direction for shooting
+
+## State
+
+- Player position: sync with backend on save (5 min or shortcut)
+- Local state for real-time movement, no frequent API calls

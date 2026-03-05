@@ -1,0 +1,29 @@
+---
+description: Game mechanics - collision, weapons, spawn, items
+globs: frontend/**/*.{ts,tsx}, backend/**/game/**/*.ts
+alwaysApply: false
+---
+
+# Game Mechanics
+
+## Collision
+
+- Player cannot move through: buildings, bridges, walls
+- Use Mapbox building polygons or custom no-go zones
+- Projectiles: hit zombies, may bounce/penetrate based on weapon
+
+## Weapons & Projectiles
+
+- Different weapons = different bullet patterns (spread, burst, homing, etc.)
+- Items drop from zombies; can evolve or modify bullet behavior
+
+## Spawn
+
+- Zombies spawn around player (radius-based)
+- Spawn rate/config from backend or local config
+
+## Save Position
+
+- Trigger: every 5 minutes OR keyboard shortcut (e.g. `S` or `F5`)
+- Payload: `{ lat, lng, userId }`
+- Load on game start from last saved position
