@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import { useMap } from '../contexts/MapContext'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 
@@ -10,7 +11,7 @@ type MapProps = {
 
 export function Map({ center }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const mapRef = useRef<mapboxgl.Map | null>(null)
+  const { map, setMap } = useMap()
 
   useEffect(() => {
     if (!containerRef.current || !MAPBOX_TOKEN) return
@@ -28,16 +29,16 @@ export function Map({ center }: MapProps) {
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
-    mapRef.current = map
+    setMap(map)
     return () => {
       map.remove()
-      mapRef.current = null
+      setMap(null)
     }
-  }, [])
+  }, [setMap])
 
   useEffect(() => {
-    mapRef.current?.setCenter([center.lng, center.lat])
-  }, [center.lat, center.lng])
+    map?.setCenter([center.lng, center.lat], { duration: 0 })
+  }, [map, center.lat, center.lng])
 
   return <div ref={containerRef} className="map-container" />
 }

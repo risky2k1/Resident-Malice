@@ -22,3 +22,17 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+.zombie {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9;
+}
+
+.zombie-sprite {
+  width: 48px;
+  height: 48px;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
