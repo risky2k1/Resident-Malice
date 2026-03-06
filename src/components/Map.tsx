@@ -27,6 +27,7 @@ export function Map({ center }: MapProps) {
       bearing: -20,
       antialias: true,
       dragRotate: false,
+      dragPan: false,
     })
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
