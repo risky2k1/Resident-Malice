@@ -61,7 +61,15 @@ function spawnZombieNear(
   }
 }
 
-export function useZombies(playerPosition: { lat: number; lng: number }) {
+export type UseZombiesOptions = {
+  isWalkable?: (lat: number, lng: number) => boolean
+}
+
+export function useZombies(
+  playerPosition: { lat: number; lng: number },
+  options?: UseZombiesOptions
+) {
+  const { isWalkable } = options ?? {}
   const baseId = useId()
   const [zombies, setZombies] = useState<Zombie[]>(() =>
     Array.from({ length: INITIAL_COUNT }, (_, i) =>
@@ -98,14 +106,15 @@ export function useZombies(playerPosition: { lat: number; lng: number }) {
             const dLng = playerPosition.lng - z.lng
             const dist = Math.sqrt(dLat * dLat + dLng * dLng) || 1e-10
             const step = Math.min(ZOMBIE_SPEED, dist * 0.1)
-            const lat = z.lat + (dLat / dist) * step
-            const lng = z.lng + (dLng / dist) * step
+            const newLat = z.lat + (dLat / dist) * step
+            const newLng = z.lng + (dLng / dist) * step
+            if (isWalkable && !isWalkable(newLat, newLng)) return z
             const direction = getDirectionToward(
               { lat: z.lat, lng: z.lng },
               playerPosition
             )
 
-            return { ...z, lat, lng, direction }
+            return { ...z, lat: newLat, lng: newLng, direction }
           })
           .filter((z): z is Zombie => z !== null)
       )
@@ -113,7 +122,7 @@ export function useZombies(playerPosition: { lat: number; lng: number }) {
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [playerPosition.lat, playerPosition.lng])
+  }, [playerPosition.lat, playerPosition.lng, isWalkable])
 
   return zombies
 }

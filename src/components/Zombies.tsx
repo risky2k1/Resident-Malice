@@ -4,11 +4,12 @@ import { Zombie } from './Zombie'
 
 type ZombiesProps = {
   playerPosition: { lat: number; lng: number }
+  isWalkable?: (lat: number, lng: number) => boolean
 }
 
-export function Zombies({ playerPosition }: ZombiesProps) {
+export function Zombies({ playerPosition, isWalkable }: ZombiesProps) {
   const { map } = useMap()
-  const zombies = useZombies(playerPosition)
+  const zombies = useZombies(playerPosition, { isWalkable })
 
   if (!map) return null
 

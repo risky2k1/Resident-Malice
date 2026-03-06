@@ -2,7 +2,16 @@ import { useEffect, useState } from 'react'
 
 const MOVE_SPEED = 0.000002
 
-export function usePlayerMovement(initialLat = 10.78, initialLng = 106.7) {
+export type UsePlayerMovementOptions = {
+  isWalkable?: (lat: number, lng: number) => boolean
+}
+
+export function usePlayerMovement(
+  initialLat = 10.78,
+  initialLng = 106.7,
+  options?: UsePlayerMovementOptions
+) {
+  const { isWalkable } = options ?? {}
   const [position, setPosition] = useState({ lat: initialLat, lng: initialLng })
   const [keys, setKeys] = useState({ w: false, a: false, s: false, d: false })
 
@@ -45,13 +54,14 @@ export function usePlayerMovement(initialLat = 10.78, initialLng = 106.7) {
         if (keys.s) lat -= MOVE_SPEED
         if (keys.a) lng -= MOVE_SPEED
         if (keys.d) lng += MOVE_SPEED
+        if (isWalkable && !isWalkable(lat, lng)) return prev
         return { lat, lng }
       })
       rafId = requestAnimationFrame(tick)
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [keys.w, keys.a, keys.s, keys.d])
+  }, [keys.w, keys.a, keys.s, keys.d, isWalkable])
 
   return { position, keys }
 }
