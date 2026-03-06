@@ -53,5 +53,5 @@ export function usePlayerMovement(initialLat = 10.78, initialLng = 106.7) {
     return () => cancelAnimationFrame(rafId)
   }, [keys.w, keys.a, keys.s, keys.d])
 
-  return position
+  return { position, keys }
 }

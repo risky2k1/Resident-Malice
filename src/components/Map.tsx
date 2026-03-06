@@ -22,6 +22,8 @@ export function Map({ center }: MapProps) {
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [center.lng, center.lat],
       zoom: 20,
+      pitch: 60,
+      bearing: -20,
     })
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')

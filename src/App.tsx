@@ -4,12 +4,12 @@ import { Player } from './components/Player'
 import { usePlayerMovement } from './hooks/usePlayerMovement'
 
 function App() {
-  const position = usePlayerMovement()
+  const { position, keys } = usePlayerMovement()
 
   return (
     <>
       <Map center={position} />
-      <Player />
+      <Player keys={keys} />
     </>
   )
 }
