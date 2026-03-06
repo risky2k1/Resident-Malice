@@ -43,12 +43,24 @@ function getShootDirection(
   return { dirLat: dirLat / dLen, dirLng: dirLng / dLen }
 }
 
+export type UsePlayerShootingOptions = {
+  isWalkable?: (lat: number, lng: number) => boolean
+  zombies?: { id: string; lat: number; lng: number; state: string }[]
+  onZombieHit?: (zombieId: string) => void
+}
+
+const ZOMBIE_HIT_RADIUS = 0.000035
+
 export function usePlayerShooting(
   playerPosition: { lat: number; lng: number },
-  map: MapboxMap | null
+  map: MapboxMap | null,
+  options?: UsePlayerShootingOptions
 ) {
+  const { isWalkable, zombies = [], onZombieHit } = options ?? {}
   const [bullets, setBullets] = useState<Bullet[]>([])
   const lastShotRef = useRef(0)
+  const isHoldingRef = useRef(false)
+  const mousePosRef = useRef({ x: 0, y: 0 })
 
   const shoot = useCallback(
     (mouseX: number, mouseY: number) => {
@@ -75,10 +87,39 @@ export function usePlayerShooting(
 
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return
+      isHoldingRef.current = true
+      mousePosRef.current = { x: e.clientX, y: e.clientY }
       shoot(e.clientX, e.clientY)
     }
+    const handleMouseUp = (e: MouseEvent) => {
+      if (e.button !== 0) return
+      isHoldingRef.current = false
+    }
+    const handleMouseLeave = () => {
+      isHoldingRef.current = false
+    }
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePosRef.current = { x: e.clientX, y: e.clientY }
+    }
+    const fireInterval = setInterval(() => {
+      if (isHoldingRef.current) {
+        shoot(mousePosRef.current.x, mousePosRef.current.y)
+      }
+    }, FIRE_RATE_MS)
+
     window.addEventListener('mousedown', handleMouseDown)
-    return () => window.removeEventListener('mousedown', handleMouseDown)
+    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mouseleave', handleMouseLeave)
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mousedown', handleMouseDown)
+      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('mousemove', handleMouseMove)
+      clearInterval(fireInterval)
+    }
   }, [shoot])
 
   useEffect(() => {
@@ -91,6 +132,21 @@ export function usePlayerShooting(
           .map((b) => {
             const newLat = b.lat + b.dirLat * BULLET_SPEED
             const newLng = b.lng + b.dirLng * BULLET_SPEED
+
+            // Hit building
+            if (isWalkable && !isWalkable(newLat, newLng)) return null
+
+            // Hit zombie
+            const aliveZombies = zombies.filter((z) => z.state === 'alive')
+            for (const z of aliveZombies) {
+              const d =
+                (newLat - z.lat) ** 2 + (newLng - z.lng) ** 2
+              if (d < ZOMBIE_HIT_RADIUS ** 2) {
+                onZombieHit?.(z.id)
+                return null
+              }
+            }
+
             const dist =
               Math.sqrt(
                 (newLat - b.startLat) ** 2 + (newLng - b.startLng) ** 2
@@ -104,7 +160,7 @@ export function usePlayerShooting(
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [bullets.length])
+  }, [bullets.length, isWalkable, zombies, onZombieHit])
 
   return bullets
 }

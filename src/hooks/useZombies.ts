@@ -1,4 +1,4 @@
-import { useEffect, useState, useId } from 'react'
+import { useCallback, useEffect, useState, useId } from 'react'
 import type { Direction } from '../assets/zom_char'
 
 const ZOMBIE_SPEED = 0.0000012
@@ -124,5 +124,15 @@ export function useZombies(
     return () => cancelAnimationFrame(rafId)
   }, [playerPosition.lat, playerPosition.lng, isWalkable])
 
-  return zombies
+  const hitZombie = useCallback((id: string) => {
+    setZombies((prev) =>
+      prev.map((z) =>
+        z.id === id && z.state === 'alive'
+          ? { ...z, state: 'dying' as ZombieState, deathStartTime: Date.now() }
+          : z
+      )
+    )
+  }, [])
+
+  return { zombies, hitZombie }
 }
