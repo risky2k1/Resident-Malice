@@ -25,9 +25,54 @@ export function Map({ center }: MapProps) {
       zoom: 20,
       pitch: 60,
       bearing: -20,
+      antialias: true,
     })
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
+
+    map.on('style.load', () => {
+      const layers = map.getStyle().layers
+      const labelLayer = layers?.find(
+        (l) =>
+          l.type === 'symbol' &&
+          (l.layout as Record<string, unknown>)?.['text-field']
+      )
+      const beforeId = labelLayer?.id
+
+      map.addLayer(
+        {
+          id: '3d-buildings',
+          source: 'composite',
+          'source-layer': 'building',
+          filter: ['==', 'extrude', 'true'],
+          type: 'fill-extrusion',
+          minzoom: 15,
+          paint: {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15,
+              0,
+              15.05,
+              ['get', 'height'],
+            ],
+            'fill-extrusion-base': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              15,
+              0,
+              15.05,
+              ['get', 'min_height'],
+            ],
+            'fill-extrusion-opacity': 0.7,
+          },
+        },
+        beforeId
+      )
+    })
 
     setMap(map)
     return () => {
