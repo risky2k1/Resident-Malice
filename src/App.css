@@ -36,3 +36,15 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+.bullet {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: #fbbf24;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 11;
+  box-shadow: 0 0 4px rgba(251, 191, 36, 0.8);
+}
